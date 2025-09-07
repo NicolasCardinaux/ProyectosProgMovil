@@ -15,7 +15,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 
-// Importar componentes
+
 import QrGenerator from './components/QrGenerator';
 import ScanResult from './components/ScanResult';
 import ScanHistory from './components/ScanHistory';
@@ -23,10 +23,10 @@ import ScanHistory from './components/ScanHistory';
 const HISTORY_KEY = 'scan_history';
 const MAX_HISTORY_ITEMS = 20;
 
-// Monedas válidas para validación
+
 const VALID_CURRENCIES = ['ARS', 'USD', 'EUR', 'BRL', 'CLP', 'MXN', 'COP', 'PEN'];
 
-// Función para verificar si es un enlace válido
+
 export const isUrl = (text) => {
   try {
     const url = new URL(text);
@@ -36,7 +36,7 @@ export const isUrl = (text) => {
   }
 };
 
-// Función mejorada para parsear y validar datos de pago
+
 export const parsePaymentData = (data) => {
   if (typeof data !== 'string' || !data.startsWith('PAY:')) {
     return null;
@@ -49,18 +49,18 @@ export const parsePaymentData = (data) => {
 
   const [id, amount, currency] = parts;
   
-  // Validaciones
+
   if (!id || id.trim() === '') {
     return { isValid: false, error: 'ID no válido' };
   }
   
-  // Validar que el monto sea numérico
+
   const amountNumber = parseFloat(amount);
   if (isNaN(amountNumber) || amountNumber <= 0) {
     return { isValid: false, error: 'Monto no válido' };
   }
   
-  // Validar que la moneda sea válida
+
   if (!VALID_CURRENCIES.includes(currency.toUpperCase())) {
     return { isValid: false, error: `Moneda no válida. Use: ${VALID_CURRENCIES.join(', ')}` };
   }
@@ -74,7 +74,7 @@ export const parsePaymentData = (data) => {
   };
 };
 
-// Componente principal
+
 export default function App() {
   const [qrValue, setQrValue] = useState('https://expo.dev');
   const [scannedData, setScannedData] = useState(null);
@@ -83,7 +83,7 @@ export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
 
-  // Cargar historial
+
   useEffect(() => {
     const loadHistory = async () => {
       try {
@@ -130,7 +130,7 @@ export default function App() {
     setScannerVisible(false);
     setScannedData({ type: 'QR_CODE', data });
 
-    // Redirección automática si es un enlace
+
     if (isUrl(data)) {
       Alert.alert(
         'Enlace detectado',
@@ -226,7 +226,7 @@ export default function App() {
                 }}
               />
               
-              {/* Overlay oscuro con marco transparente */}
+              {}
               <View style={styles.scannerOverlay}>
                 <View style={styles.scannerFrameContainer}>
                   <View style={styles.scannerFrame} />
@@ -235,7 +235,7 @@ export default function App() {
                   <View style={styles.cornerBottomLeft} />
                   <View style={styles.cornerBottomRight} />
                   
-                  {/* Línea animada de escaneo */}
+                  {}
                   <View style={styles.scanLine} />
                 </View>
                 

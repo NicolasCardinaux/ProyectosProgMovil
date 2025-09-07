@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 
-// Función para capitalizar la primera letra
+
 const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };

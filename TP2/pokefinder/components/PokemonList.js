@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View, Text, ActivityIndicator } from 'react-nativ
 import PokemonCard from './PokemonCard';
 
 const PokemonList = ({ pokemonData, onRefresh, isRefreshing, onLoadMore, isLoadingMore }) => {
-  // Componente que se muestra cuando la lista está vacía (ej. sin resultados de búsqueda)
+
   const renderEmptyComponent = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.emptyText}>🤔</Text>
@@ -12,7 +12,7 @@ const PokemonList = ({ pokemonData, onRefresh, isRefreshing, onLoadMore, isLoadi
     </View>
   );
   
-  // Componente para el footer (muestra un spinner al cargar más)
+
   const renderFooter = () => {
     if (!isLoadingMore) return null;
     return (
@@ -27,14 +27,12 @@ const PokemonList = ({ pokemonData, onRefresh, isRefreshing, onLoadMore, isLoadi
       data={pokemonData}
       renderItem={({ item }) => <PokemonCard pokemon={item} />}
       keyExtractor={item => item.id.toString()}
-      numColumns={2} // Muestra los Pokémon en una grilla de 2 columnas
+      numColumns={2}
       contentContainerStyle={styles.listContent}
-      // Funcionalidad de pull-to-refresh
       onRefresh={onRefresh}
       refreshing={isRefreshing}
-      // (Bonus) Paginación
       onEndReached={onLoadMore}
-      onEndReachedThreshold={0.5} // Llama a onLoadMore cuando estamos a mitad de pantalla del final
+      onEndReachedThreshold={0.5} 
       ListEmptyComponent={renderEmptyComponent}
       ListFooterComponent={renderFooter}
     />

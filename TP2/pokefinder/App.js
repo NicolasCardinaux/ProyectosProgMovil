@@ -6,8 +6,6 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-
-// Importamos los componentes
 import PokemonList from './components/PokemonList';
 import SearchBar from './components/SearchBar';
 import ErrorDisplay from './components/ErrorDisplay';
@@ -25,17 +23,15 @@ export default function App() {
   const [cache, setCache] = useState({});
 
   const fetchPokemon = useCallback(async (url, isRefresh = false) => {
-    // Si no es un refresh, mostramos el spinner principal
     if (!isRefresh) {
       setIsLoading(true);
     }
     setError(null);
 
-    // Revisamos el cache (solo para paginación, no para refresh)
     if (cache[url] && !isRefresh) {
       const cachedData = cache[url];
       
-      // Lógica mejorada para añadir Pokémon desde caché sin duplicados
+
       setAllPokemon(prev => {
         const existingIds = new Set(prev.map(p => p.id));
         const newPokemon = cachedData.pokemon.filter(p => !existingIds.has(p.id));
@@ -64,15 +60,14 @@ export default function App() {
         };
       });
 
-      // Guardamos en cache
+
       setCache(prevCache => ({...prevCache, [url]: { pokemon: processedPokemon, next: data.next }}));
       
-      // Lógica mejorada para actualizar el estado, previniendo duplicados (soluciona el warning de las keys)
+
       setAllPokemon(prev => {
         if (isRefresh) {
-          return processedPokemon; // Si es refresh, reemplaza toda la lista
+          return processedPokemon; 
         }
-        // Si no es refresh (paginación), combina las listas y filtra para tener items únicos
         const combined = [...prev, ...processedPokemon];
         const uniquePokemon = combined.filter((pokemon, index, self) =>
           index === self.findIndex((p) => (
@@ -91,12 +86,12 @@ export default function App() {
     }
   }, [cache]);
 
-  // useEffect para la carga inicial
+
   useEffect(() => {
-    fetchPokemon(API_URL, true); // La carga inicial la tratamos como un refresh para poblar la lista
+    fetchPokemon(API_URL, true); 
   }, [fetchPokemon]);
 
-  // Memoización del filtrado
+
   const filteredPokemon = useMemo(() => {
     if (!searchTerm) {
       return allPokemon;
@@ -106,21 +101,20 @@ export default function App() {
     );
   }, [searchTerm, allPokemon]);
 
-  // Handler para el pull-to-refresh
+
   const handleRefresh = () => {
     setIsRefreshing(true);
-    // CORRECCIÓN: No limpiamos el array aquí, fetchPokemon se encarga de reemplazarlo
     fetchPokemon(API_URL, true);
   };
   
-  // Handler para la paginación
+
   const handleLoadMore = () => {
     if (nextUrl && !isLoading) {
       fetchPokemon(nextUrl);
     }
   };
 
-  // Lógica de renderizado
+
   const renderContent = () => {
     if (isLoading && !allPokemon.length) {
       return <ActivityIndicator size="large" color="#FFCB05" style={styles.centered}/>;

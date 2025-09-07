@@ -1,12 +1,11 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
-// 1. Importamos el componente de íconos
 import { Feather } from '@expo/vector-icons';
 
 const SearchBar = ({ searchTerm, onSearchTermChange }) => {
   return (
     <View style={styles.container}>
-      {/* 2. Reemplazamos el <Text> con el emoji por un componente de ícono */}
+      {}
       <Feather name="search" size={20} color="#888" style={styles.icon} />
       <TextInput
         style={styles.input}
