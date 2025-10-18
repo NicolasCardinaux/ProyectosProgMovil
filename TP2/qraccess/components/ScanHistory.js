@@ -1,17 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Linking } from 'react-native';
-import { isUrl } from '../App';
+import { isUrl } from '../App'; 
 
+// Componente para mostrar el historial de escaneos QR.
 const ScanHistory = ({ history, onClearHistory }) => {
+
   if (!history || history.length === 0) {
     return null;
   }
 
+
   const openHistoryItem = async (data) => {
     if (isUrl(data)) {
       try {
-        const canOpen = await Linking.canOpenURL(data);
-        if (canOpen) {
+        if (await Linking.canOpenURL(data)) {
           await Linking.openURL(data);
         }
       } catch (error) {
@@ -32,16 +34,16 @@ const ScanHistory = ({ history, onClearHistory }) => {
       </View>
       <ScrollView style={styles.list}>
         {history.map((item, index) => (
-          <TouchableOpacity 
+          <TouchableOpacity
             key={`${item.date}-${index}`} 
             style={styles.historyItem}
-            onPress={() => openHistoryItem(item.data)}
+            onPress={() => openHistoryItem(item.data)} 
           >
             <Text style={styles.historyText} numberOfLines={1}>
-              {item.data}
+              {item.data} {}
             </Text>
             <Text style={styles.historyDate}>
-              {new Date(item.date).toLocaleString()}
+              {new Date(item.date).toLocaleString()} {}
             </Text>
             {isUrl(item.data) && (
               <Text style={styles.linkIndicator}>🔗 Enlace</Text>
@@ -53,6 +55,7 @@ const ScanHistory = ({ history, onClearHistory }) => {
   );
 };
 
+// Estilos
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#1E1E1E',
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
   list: {
     marginTop: 10,
     width: '100%',
-    maxHeight: 200,
+    maxHeight: 200, 
   },
   historyItem: {
     backgroundColor: '#2C2C2C',

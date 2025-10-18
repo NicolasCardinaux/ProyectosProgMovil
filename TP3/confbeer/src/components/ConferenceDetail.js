@@ -3,9 +3,11 @@ import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Linking, P
 import MapViewComponent from './MapViewComponent';
 import Icon from '@expo/vector-icons/FontAwesome';
 
+// Componente para mostrar la pantalla de detalle de una conferencia.
 const ConferenceDetail = ({ route }) => {
   const { conference } = route.params;
 
+  // Función para abrir la ubicación en la app de mapas.
   const openInMaps = () => {
     const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
     const latLng = `${conference.location.latitude},${conference.location.longitude}`;
@@ -14,7 +16,6 @@ const ConferenceDetail = ({ route }) => {
       ios: `${scheme}${label}@${latLng}`,
       android: `${scheme}${latLng}(${label})`
     });
-
     Linking.openURL(url);
   };
 
@@ -41,6 +42,7 @@ const ConferenceDetail = ({ route }) => {
 
         <Text style={styles.fullDescription}>{conference.fullDescription}</Text>
 
+        {}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Icon name="list-alt" size={20} color="#BB86FC" />
@@ -54,6 +56,7 @@ const ConferenceDetail = ({ route }) => {
           ))}
         </View>
 
+        {}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Icon name="map-marker" size={20} color="#BB86FC" />
@@ -74,7 +77,6 @@ const ConferenceDetail = ({ route }) => {
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 25,
-    marginTop: -30, 
+    marginTop: -30,
     backgroundColor: '#121212',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -206,6 +208,5 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
-
 
 export default ConferenceDetail;

@@ -1,5 +1,6 @@
-const API_URL = 'http://10.0.2.2:3000'; 
+const API_URL = 'http://10.0.2.2:3000';
 
+// Esta función se encarga de llamar a nuestro microservicio de API para iniciar una nueva transacción.
 export const initiateTransaction = async () => {
   const response = await fetch(`${API_URL}/transactions`, {
     method: 'POST',

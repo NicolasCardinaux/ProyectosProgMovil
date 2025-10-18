@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+// Componente reutilizable para mostrar un mensaje de error genérico en la pantalla
 const ErrorDisplay = ({ message, onRetry }) => {
   return (
     <View style={styles.container}>

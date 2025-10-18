@@ -15,15 +15,16 @@ import { TransactionCard } from './src/components/TransactionCard';
 import { EmptyState } from './src/components/EmptyState';
 import { styles } from './src/styles/globalStyles';
 
+// Componente principal de la aplicación que orquesta la UI y la lógica.
 export default function App() {
   const [transactions, setTransactions] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Callback que se ejecuta cada vez que llega un evento por WebSocket.
   const handleWsMessage = useCallback((event) => {
     setTransactions((prev) => {
       const newTransactions = { ...prev };
       const txnId = event.transactionId;
-
       if (newTransactions[txnId]) {
         if (!newTransactions[txnId].events.some((e) => e.id === event.id)) {
           newTransactions[txnId].events.push(event);
@@ -34,7 +35,9 @@ export default function App() {
     });
   }, []);
 
+
   const wsStatus = useWebSocket(handleWsMessage);
+
 
   const handleInitiateTransaction = async () => {
     setIsSubmitting(true);
@@ -51,32 +54,30 @@ export default function App() {
     }
   };
 
+
   const transactionList = useMemo(() =>
-    Object.values(transactions).sort((a, b) => {
-      const timeA = a.events[0]?.ts || 0;
-      const timeB = b.events[0]?.ts || 0;
-      return timeB - timeA;
-    }),
+    Object.values(transactions).sort((a, b) => (b.events[0]?.ts || 0) - (a.events[0]?.ts || 0)),
     [transactions]
   );
 
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#0A0A0A" />
+      <StatusBar barStyle="light-content" backgroundColor="#0A0A0A" />      
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Timeline de Transacciones</Text>
         <View style={styles.statusContainer}>
           <View
             style={[
               styles.statusIndicator,
-              { backgroundColor: wsStatus === 'Connected' ? '#4CAF50' : '#FF9800' }, // Colores de estado más vibrantes
+              { backgroundColor: wsStatus === 'Connected' ? '#4CAF50' : '#FF9800' },
             ]}
           />
           <Text style={styles.statusText}>{wsStatus}</Text>
         </View>
       </View>
 
-      <FlatList
+            <FlatList
         data={transactionList}
         renderItem={({ item }) => <TransactionCard transaction={item} />}
         keyExtractor={(item) => item.id}
@@ -84,15 +85,14 @@ export default function App() {
         ListEmptyComponent={<EmptyState />}
       />
 
+      
       <View style={styles.footer}>
         <TouchableOpacity
           style={[styles.button, isSubmitting && styles.buttonDisabled]}
           onPress={handleInitiateTransaction}
           disabled={isSubmitting}
         >
-          {isSubmitting ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
+          {isSubmitting ? <ActivityIndicator color="#fff" /> : (
             <>
               <Feather name="zap" size={20} color="#fff" />
               <Text style={styles.buttonText}>Iniciar Transacción</Text>

@@ -1,28 +1,26 @@
 import { StyleSheet, Platform } from 'react-native';
 
 export const styles = StyleSheet.create({
-  // Contenedor principal para toda la aplicación
   safeArea: {
     flex: 1,
-    backgroundColor: '#0A0A0A', // Negro profundo para un efecto premium
+    backgroundColor: '#0A0A0A', 
   },
 
-  // Encabezado de la aplicación
   header: { 
     padding: 20, 
     flexDirection: 'row', 
     alignItems: 'center',
     borderBottomWidth: 1, 
-    borderBottomColor: '#1A1A1A', // Borde sutil
+    borderBottomColor: '#1A1A1A', 
   },
   headerTitle: { 
     fontSize: 26, 
-    fontWeight: '700', // Más audaz para impacto
+    fontWeight: '700', 
     color: '#E0E0E0', 
-    letterSpacing: 0.5, // Espaciado de letras sutil
+    letterSpacing: 0.5, 
   },
 
-  // Indicador de estado de conexión
+
   statusContainer: { 
     flexDirection: 'row', 
     alignItems: 'center', 
@@ -45,12 +43,12 @@ export const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
 
-  // Contenedor de la lista de transacciones
+
   listContainer: { 
     padding: 20, 
   },
   
-  // Pie de página con el botón de acción
+
   footer: { 
     padding: 20, 
     borderTopWidth: 1, 
@@ -58,7 +56,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#0A0A0A', 
   },
   button: {
-    backgroundColor: '#4CAF50', // Verde vibrante para la acción principal
+    backgroundColor: '#4CAF50',
     paddingVertical: 18,
     borderRadius: 12,
     flexDirection: 'row',
@@ -81,7 +79,7 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
   },
 
-  // Estado vacío de la lista
+
   emptyContainer: { 
     flex: 1, 
     justifyContent: 'center', 
@@ -97,7 +95,7 @@ export const styles = StyleSheet.create({
     lineHeight: 24,
   },
 
-  // Tarjeta de transacción
+
   card: {
     backgroundColor: '#1A1A1A',
     borderRadius: 16,
@@ -125,7 +123,6 @@ export const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
   },
 
-  // Línea de tiempo
   timelineContainer: { 
     borderLeftWidth: 2, 
     borderLeftColor: '#2A2A2A', 

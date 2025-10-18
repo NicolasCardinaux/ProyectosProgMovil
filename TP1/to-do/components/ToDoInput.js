@@ -1,24 +1,27 @@
 import React, { useState } from "react";
 import { View, TextInput, Pressable, Text, StyleSheet } from "react-native";
 
+// Componente para ingresar nuevas tareas (un campo de texto y un botón de agregar).
 export default function ToDoInput({ onAdd }) {
   const [text, setText] = useState("");
 
   const handleAdd = () => {
     onAdd(text);
-    setText("");
+    setText(""); 
   };
 
   return (
     <View style={styles.container}>
+      {}
       <TextInput
         style={styles.input}
         placeholder="Nueva tarea..."
         placeholderTextColor="#8b949e"
         value={text}
         onChangeText={setText}
-        onSubmitEditing={handleAdd}
+        onSubmitEditing={handleAdd} 
       />
+      {}
       <Pressable style={styles.button} onPress={handleAdd}>
         <Text style={styles.buttonText}>+</Text>
       </Pressable>
@@ -26,7 +29,6 @@ export default function ToDoInput({ onAdd }) {
   );
 }
 
-// Los estilos (styles) permanecen sin cambios
 const styles = StyleSheet.create({
   container: { flexDirection: "row", marginBottom: 15 },
   input: {

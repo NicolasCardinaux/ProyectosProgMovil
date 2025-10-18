@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// La función `main` es el punto de entrada para todos nuestros microservicios.
 func main() {
 	role := os.Getenv("SERVICE_ROLE")
 	if role == "" {

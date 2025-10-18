@@ -3,10 +3,10 @@ import { View, FlatList, StyleSheet, Text, ActivityIndicator } from 'react-nativ
 import ConferenceCard from './ConferenceCard';
 import { getConferences } from '../services/ConferenceService';
 
+// Componente que carga las conferencias y las muestra en una grilla de dos columnas,
 const ConferenceGrid = ({ navigation, searchText }) => {
   const [allConferences, setAllConferences] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
 
   useEffect(() => {
     const loadData = async () => {
@@ -14,10 +14,8 @@ const ConferenceGrid = ({ navigation, searchText }) => {
       setAllConferences(data);
       setIsLoading(false);
     };
-
     loadData();
-  }, []); 
-
+  }, []);
 
   const filteredConferences = allConferences.filter(conference =>
     conference.title.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -28,7 +26,6 @@ const ConferenceGrid = ({ navigation, searchText }) => {
   const renderItem = ({ item }) => (
     <ConferenceCard conference={item} navigation={navigation} />
   );
-  
 
   if (isLoading) {
     return (
@@ -54,10 +51,10 @@ const ConferenceGrid = ({ navigation, searchText }) => {
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
         numColumns={2}
-        key={2}
+        key={2} 
         contentContainerStyle={styles.grid}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
+        keyboardShouldPersistTaps="handled" 
         ListHeaderComponent={
           filteredConferences.length > 0 && (
             <Text style={styles.resultsCount}>
@@ -75,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#121212',
   },
-  loadingContainer: { 
+  loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,23 +1,23 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Linking } from 'react-native';
-import * as Clipboard from 'expo-clipboard';
-import { isUrl, parsePaymentData } from '../App';
+import * as Clipboard from 'expo-clipboard'; 
+import { isUrl, parsePaymentData } from '../App'; 
 
+// Componente para mostrar el último resultado de un escaneo QR.
 const ScanResult = ({ scannedData }) => {
-  if (!scannedData) return null;
 
+  if (!scannedData) return null;
   const paymentInfo = parsePaymentData(scannedData.data);
   const isLink = isUrl(scannedData.data);
-
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(scannedData.data);
     Alert.alert('Copiado', '¡El resultado se ha copiado al portapapeles!');
   };
 
+
   const openLink = async () => {
     try {
-      const canOpen = await Linking.canOpenURL(scannedData.data);
-      if (canOpen) {
+      if (await Linking.canOpenURL(scannedData.data)) {
         await Linking.openURL(scannedData.data);
       } else {
         Alert.alert('Error', 'No se puede abrir este enlace');
@@ -30,7 +30,8 @@ const ScanResult = ({ scannedData }) => {
   return (
     <View style={styles.card}>
       <Text style={styles.cardTitle}>Último Resultado</Text>
-      
+
+      {}
       {paymentInfo ? (
         <View style={styles.parsedContainer}>
           {paymentInfo.isValid ? (
@@ -49,9 +50,11 @@ const ScanResult = ({ scannedData }) => {
           )}
         </View>
       ) : (
+
         <Text style={styles.resultText}>{scannedData.data}</Text>
       )}
 
+      {}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.actionButton} onPress={copyToClipboard}>
           <Text style={styles.actionButtonText}>Copiar</Text>

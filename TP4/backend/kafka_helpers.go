@@ -9,20 +9,21 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
+// --- Definición de Topics de Kafka ---
 const (
 	TopicCommands = "txn.commands"
 	TopicEvents   = "txn.events"
 	TopicDLQ      = "txn.dlq"
 )
 
+// --- Funciones de Interacción con Kafka ---
 
 func publish(broker, topic string, key string, evt *EventEnvelope) error {
 	w := kafka.Writer{
 		Addr:         kafka.TCP(broker),
 		Topic:        topic,
-		Balancer:     &kafka.Hash{}, 
+		Balancer:     &kafka.Hash{},
 		RequiredAcks: kafka.RequireOne,
-		Async:        false,
 	}
 	defer w.Close()
 
@@ -45,9 +46,9 @@ func publish(broker, topic string, key string, evt *EventEnvelope) error {
 
 func newReader(broker, topic, groupId string) *kafka.Reader {
 	return kafka.NewReader(kafka.ReaderConfig{
-		Brokers: []string{broker},
-		Topic:   topic,
-		GroupID: groupId,
+		Brokers:  []string{broker},
+		Topic:    topic,
+		GroupID:  groupId, 
 		MinBytes: 1,
 		MaxBytes: 10e6,
 	})

@@ -2,21 +2,24 @@ import React from 'react';
 import { View, TextInput, StyleSheet, Text } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
+// Componente que muestra un código QR basado en el texto ingresado
 const QrGenerator = ({ value, onValueChange }) => {
   return (
     <View style={styles.card}>
       <Text style={styles.cardTitle}>Generador de QR</Text>
+      {}
       <View style={styles.qrContainer}>
         <QRCode
-          value={value || ' '}
-          size={200}
+          value={value || ' '} 
+          size={200} 
           color="black"
           backgroundColor="white"
         />
       </View>
+      {}
       <TextInput
         style={styles.input}
-        onChangeText={onValueChange}
+        onChangeText={onValueChange} 
         value={value}
         placeholder="Ingresa el texto para el QR..."
         placeholderTextColor="#888"

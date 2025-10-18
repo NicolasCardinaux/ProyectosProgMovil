@@ -1,16 +1,17 @@
 import React from "react";
 import { FlatList } from "react-native";
-import ToDoItem from "./ToDoItem";
+import ToDoItem from "./ToDoItem"; 
 
+// Componente responsable de renderizar la lista completa de tareas.
 function ToDoList({ tasks, onToggle, onDelete }) {
   return (
     <FlatList
-      data={tasks}
-      keyExtractor={(item) => item.id}
+      data={tasks} 
+      keyExtractor={(item) => item.id} 
       renderItem={({ item }) => (
         <ToDoItem
           task={item}
-          onToggle={onToggle}
+          onToggle={onToggle} 
           onDelete={onDelete}
         />
       )}
@@ -18,5 +19,5 @@ function ToDoList({ tasks, onToggle, onDelete }) {
   );
 }
 
-// Exportar la versión memoizada del componente
+
 export default React.memo(ToDoList);

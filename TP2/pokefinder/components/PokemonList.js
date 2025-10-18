@@ -2,6 +2,7 @@ import React from 'react';
 import { FlatList, StyleSheet, View, Text, ActivityIndicator } from 'react-native';
 import PokemonCard from './PokemonCard';
 
+// Componente principal para mostrar la lista de Pokémon en una grilla.
 const PokemonList = ({ pokemonData, onRefresh, isRefreshing, onLoadMore, isLoadingMore }) => {
 
   const renderEmptyComponent = () => (
@@ -11,7 +12,6 @@ const PokemonList = ({ pokemonData, onRefresh, isRefreshing, onLoadMore, isLoadi
       <Text style={styles.emptySubText}>Intenta con otra búsqueda o refresca la lista.</Text>
     </View>
   );
-  
 
   const renderFooter = () => {
     if (!isLoadingMore) return null;
@@ -32,7 +32,7 @@ const PokemonList = ({ pokemonData, onRefresh, isRefreshing, onLoadMore, isLoadi
       onRefresh={onRefresh}
       refreshing={isRefreshing}
       onEndReached={onLoadMore}
-      onEndReachedThreshold={0.5} 
+      onEndReachedThreshold={0.5}
       ListEmptyComponent={renderEmptyComponent}
       ListFooterComponent={renderFooter}
     />

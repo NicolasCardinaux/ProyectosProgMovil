@@ -15,66 +15,16 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 
-
 import QrGenerator from './components/QrGenerator';
 import ScanResult from './components/ScanResult';
 import ScanHistory from './components/ScanHistory';
 
+
 const HISTORY_KEY = 'scan_history';
 const MAX_HISTORY_ITEMS = 20;
-
-
 const VALID_CURRENCIES = ['ARS', 'USD', 'EUR', 'BRL', 'CLP', 'MXN', 'COP', 'PEN'];
 
-
-export const isUrl = (text) => {
-  try {
-    const url = new URL(text);
-    return url.protocol === 'http:' || url.protocol === 'https:';
-  } catch {
-    return false;
-  }
-};
-
-
-export const parsePaymentData = (data) => {
-  if (typeof data !== 'string' || !data.startsWith('PAY:')) {
-    return null;
-  }
-  
-  const parts = data.substring(4).split('|');
-  if (parts.length !== 3) {
-    return null;
-  }
-
-  const [id, amount, currency] = parts;
-  
-
-  if (!id || id.trim() === '') {
-    return { isValid: false, error: 'ID no válido' };
-  }
-  
-
-  const amountNumber = parseFloat(amount);
-  if (isNaN(amountNumber) || amountNumber <= 0) {
-    return { isValid: false, error: 'Monto no válido' };
-  }
-  
-
-  if (!VALID_CURRENCIES.includes(currency.toUpperCase())) {
-    return { isValid: false, error: `Moneda no válida. Use: ${VALID_CURRENCIES.join(', ')}` };
-  }
-
-  return {
-    isValid: true,
-    id: id.trim(),
-    amount: amountNumber,
-    currency: currency.toUpperCase(),
-    rawAmount: amount
-  };
-};
-
-
+// Aplicación principal de escáner QR con generación y historial
 export default function App() {
   const [qrValue, setQrValue] = useState('https://expo.dev');
   const [scannedData, setScannedData] = useState(null);
@@ -83,7 +33,7 @@ export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
 
-
+  // Carga del historial de escaneos al iniciar la aplicación
   useEffect(() => {
     const loadHistory = async () => {
       try {
@@ -98,6 +48,7 @@ export default function App() {
     loadHistory();
   }, []);
 
+  // Gestión de permisos de cámara y apertura del escáner
   const handleShowScanner = async () => {
     setIsRequestingPermission(true);
     
@@ -126,6 +77,7 @@ export default function App() {
     setIsRequestingPermission(false);
   };
 
+
   const handleBarCodeScanned = async ({ data }) => {
     setScannerVisible(false);
     setScannedData({ type: 'QR_CODE', data });
@@ -151,6 +103,7 @@ export default function App() {
       );
     }
 
+
     try {
       const newScan = { 
         data, 
@@ -165,6 +118,7 @@ export default function App() {
       console.error('Failed to save scan to history.', e);
     }
   };
+
 
   const clearHistory = async () => {
     Alert.alert(
@@ -195,8 +149,10 @@ export default function App() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.headerTitle}>Acceso por QR</Text>
         
+        {}
         <QrGenerator value={qrValue} onValueChange={setQrValue} />
 
+        {}
         <TouchableOpacity 
           style={[styles.scanButton, isRequestingPermission && styles.scanButtonDisabled]} 
           onPress={handleShowScanner}
@@ -209,11 +165,14 @@ export default function App() {
           )}
         </TouchableOpacity>
 
+        {}
         {scannedData && <ScanResult scannedData={scannedData} />}
         
+        {}
         <ScanHistory history={scanHistory} onClearHistory={clearHistory} />
       </ScrollView>
 
+      {}
       <Modal visible={isScannerVisible} animationType="slide">
         <View style={styles.modalContainer}>
           {permission?.granted ? (
@@ -262,6 +221,7 @@ export default function App() {
             </View>
           )}
           
+          {}
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setScannerVisible(false)}
@@ -273,6 +233,51 @@ export default function App() {
     </SafeAreaView>
   );
 }
+
+// Funciones auxiliares para procesamiento de datos QR
+export const isUrl = (text) => {
+  try {
+    const url = new URL(text);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
+
+
+export const parsePaymentData = (data) => {
+  if (typeof data !== 'string' || !data.startsWith('PAY:')) {
+    return null;
+  }
+  
+  const parts = data.substring(4).split('|');
+  if (parts.length !== 3) {
+    return null;
+  }
+
+  const [id, amount, currency] = parts;
+
+  if (!id || id.trim() === '') {
+    return { isValid: false, error: 'ID no válido' };
+  }
+
+  const amountNumber = parseFloat(amount);
+  if (isNaN(amountNumber) || amountNumber <= 0) {
+    return { isValid: false, error: 'Monto no válido' };
+  }
+
+  if (!VALID_CURRENCIES.includes(currency.toUpperCase())) {
+    return { isValid: false, error: `Moneda no válida. Use: ${VALID_CURRENCIES.join(', ')}` };
+  }
+
+  return {
+    isValid: true,
+    id: id.trim(),
+    amount: amountNumber,
+    currency: currency.toUpperCase(),
+    rawAmount: amount
+  };
+};
 
 const styles = StyleSheet.create({
   container: {

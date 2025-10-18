@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 
+// Componente reutilizable que muestra una tarjeta con la info de una conferencia
 const ConferenceCard = ({ conference, navigation }) => {
   const [scaleValue] = useState(new Animated.Value(1));
 
-  const handlePressIn = () => {
-    Animated.spring(scaleValue, {
-      toValue: 0.96,
-      useNativeDriver: true,
-    }).start();
-  };
 
+  const handlePressIn = () => {
+    Animated.spring(scaleValue, { toValue: 0.96, useNativeDriver: true }).start();
+  };
   const handlePressOut = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
+    Animated.spring(scaleValue, { toValue: 1, useNativeDriver: true }).start();
   };
 
   return (
@@ -43,9 +38,10 @@ const ConferenceCard = ({ conference, navigation }) => {
   );
 };
 
+
 const styles = StyleSheet.create({
   cardContainer: {
-    flex: 1, 
+    flex: 1,
     margin: 8,
   },
   card: {

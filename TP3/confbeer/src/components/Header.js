@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/FontAwesome';
 
+// Componente de cabecera que contiene la barra de búsqueda para filtrar conferencias.
 const Header = ({ searchText, setSearchText }) => {
   return (
     <View style={styles.header}>
@@ -12,17 +13,18 @@ const Header = ({ searchText, setSearchText }) => {
           placeholder="Buscar conferencias..."
           placeholderTextColor="#666"
           value={searchText}
-          onChangeText={setSearchText}
-          clearButtonMode="while-editing"
-          selectionColor="#BB86FC"
+          onChangeText={setSearchText} 
+          clearButtonMode="while-editing" 
+          selectionColor="#BB86FC" 
         />
+        {}
         {searchText.length > 0 && (
           <Icon
             name="times-circle"
             size={18}
             color="#666"
             style={styles.clearIcon}
-            onPress={() => setSearchText('')}
+            onPress={() => setSearchText('')} 
           />
         )}
       </View>

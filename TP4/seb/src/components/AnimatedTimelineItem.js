@@ -3,6 +3,7 @@ import { View, Text, Animated, Easing } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { styles } from '../styles/globalStyles';
 
+// Mapea los tipos de evento a íconos y colores específicos para la UI.
 const ICONS = {
   TransactionInitiated: { name: 'send', color: '#3b82f6' },
   FundsReserved: { name: 'lock', color: '#a855f7' },
@@ -12,7 +13,9 @@ const ICONS = {
   Notified: { name: 'bell', color: '#06b6d4' },
 };
 
+// Este componente renderiza cada paso individual en la línea de tiempo de la transacción.
 export const AnimatedTimelineItem = ({ item, index }) => {
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
 
@@ -21,14 +24,16 @@ export const AnimatedTimelineItem = ({ item, index }) => {
     Animated.timing(slideAnim, { toValue: 0, duration: 400, easing: Easing.out(Easing.ease), delay: index * 100, useNativeDriver: true }).start();
   }, [fadeAnim, slideAnim, index]);
 
+
   const getIconInfo = () => {
     if (item.type === 'FraudChecked') {
       return { ...ICONS.FraudChecked, color: item.payload.risk === 'LOW' ? '#22c55e' : '#ef4444' };
     }
-    return ICONS[item.type] || { name: 'help-circle', color: '#6b7280' };
+    return ICONS[item.type] || { name: 'help-circle', color: '#6b7280' }; 
   };
 
   const iconInfo = getIconInfo();
+
 
   return (
     <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY: slideAnim }] }}>
@@ -40,7 +45,7 @@ export const AnimatedTimelineItem = ({ item, index }) => {
           <Text style={styles.timelineTitle}>{item.type.replace(/([A-Z])/g, ' $1').trim()}</Text>
           <Text style={styles.timelineSubtitle}>
             {new Date(item.ts).toLocaleTimeString()}
-            {item.payload.risk && ` - Risk: ${item.payload.risk}`}
+            {item.payload.risk && ` - Riesgo: ${item.payload.risk}`}
             {item.payload.reason && ` - ${item.payload.reason}`}
           </Text>
         </View>

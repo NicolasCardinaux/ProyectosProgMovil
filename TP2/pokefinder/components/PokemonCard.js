@@ -6,6 +6,7 @@ const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
+// Componente reutilizable que muestra una tarjeta individual para cada Pokémon.
 const PokemonCard = ({ pokemon }) => {
   return (
     <TouchableOpacity style={styles.cardContainer} activeOpacity={0.7}>
@@ -15,6 +16,7 @@ const PokemonCard = ({ pokemon }) => {
           style={styles.image}
           resizeMode="contain"
         />
+        {}
         <View style={styles.nameBadge}>
           <Text style={styles.name}>{capitalize(pokemon.name)}</Text>
         </View>

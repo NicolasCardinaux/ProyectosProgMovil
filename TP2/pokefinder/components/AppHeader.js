@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
+// Componente reutilizable que muestra la cabecera principal de la aplicación PokeFinder,
 const AppHeader = () => {
   return (
     <View style={styles.header}>
-      <Image 
-        source={{ uri: 'https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png' }} 
+      <Image
+        source={{ uri: 'https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png' }}
         style={styles.logo}
       />
       <Text style={styles.title}>PokeFinder</Text>

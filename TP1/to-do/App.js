@@ -5,19 +5,19 @@ import {
   View,
   Pressable,
   SafeAreaView,
-  Alert, // 1. Importar Alert
+  Alert, 
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import uuid from 'react-native-uuid'; // 2. Importar uuid
+import uuid from 'react-native-uuid'; 
 
 import ToDoInput from "./components/ToDoInput";
 import ToDoList from "./components/ToDoList";
 
+// Aplicación principal de lista de tareas con persistencia local
 export default function App() {
   const [tasks, setTasks] = useState([]);
-  const [filter, setFilter] = useState("all"); // all | active | completed
+  const [filter, setFilter] = useState("all");
 
-  // Cargar desde AsyncStorage (sin cambios)
   useEffect(() => {
     (async () => {
       try {
@@ -29,21 +29,22 @@ export default function App() {
     })();
   }, []);
 
-  // Guardar cada vez que cambia (sin cambios)
+
   useEffect(() => {
     AsyncStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  // 3. Funciones envueltas en useCallback para optimización
+
   const addTask = useCallback((title) => {
     if (!title.trim()) return;
     const newTask = {
-      id: uuid.v4(), // Usar uuid para un ID más robusto
+      id: uuid.v4(),
       title,
       completed: false,
     };
     setTasks((prevTasks) => [...prevTasks, newTask]);
   }, []);
+
 
   const toggleTask = useCallback((id) => {
     setTasks((prevTasks) =>
@@ -53,8 +54,8 @@ export default function App() {
     );
   }, []);
 
+
   const deleteTask = useCallback((id) => {
-    // 4. Lógica de confirmación con Alert
     Alert.alert(
       "Confirmar borrado",
       "¿Estás seguro de que quieres eliminar esta tarea?",
@@ -74,6 +75,7 @@ export default function App() {
     );
   }, []);
 
+
   const filteredTasks = tasks.filter((t) => {
     if (filter === "active") return !t.completed;
     if (filter === "completed") return t.completed;
@@ -84,21 +86,24 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>✨ To-Do App</Text>
 
+      {}
       <ToDoInput onAdd={addTask} />
 
+      {}
       <ToDoList
         tasks={filteredTasks}
         onToggle={toggleTask}
         onDelete={deleteTask}
       />
 
-      {/* Contador + Filtros */}
+      {}
       <View style={styles.footer}>
         <Text style={styles.counter}>
           Total: {tasks.length} | Completadas:{" "}
           {tasks.filter((t) => t.completed).length}
         </Text>
 
+        {}
         <View style={styles.filters}>
           {["all", "active", "completed"].map((f) => (
             <Pressable
@@ -118,7 +123,6 @@ export default function App() {
   );
 }
 
-// Los estilos (styles) permanecen sin cambios
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#0d1117", padding: 20 },
   header: {

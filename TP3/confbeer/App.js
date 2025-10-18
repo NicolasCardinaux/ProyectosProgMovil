@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, StatusBar, Text } from 'react-native';
-import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native'; 
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Header from './src/components/Header';
 import ConferenceGrid from './src/components/ConferenceGrid';
 import ConferenceDetail from './src/components/ConferenceDetail';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator(); 
 
-
+// Componente para la pantalla principal (Home).
 function HomeScreen({ navigation }) {
   const [searchText, setSearchText] = useState('');
 
@@ -27,7 +27,7 @@ export default function App() {
   return (
     <NavigationContainer theme={DarkTheme}>
       <Stack.Navigator
-        screenOptions={{
+        screenOptions={{ 
           headerStyle: {
             backgroundColor: '#1E1E1E',
             shadowColor: '#000',
@@ -42,23 +42,25 @@ export default function App() {
             backgroundColor: '#121212',
           },
           headerTitleAlign: 'center',
-          headerBackTitleVisible: false,
+          headerBackTitleVisible: false, 
         }}
       >
+        {}
         <Stack.Screen
           name="Conferencias"
           component={HomeScreen}
           options={{
-            title: '🍻 Conferencias Cerveceras',
+            title: '🍻 Conferencias Cerveceras', 
           }}
         />
+        {}
         <Stack.Screen
           name="Detalle"
           component={ConferenceDetail}
-          options={({ route }) => ({
+          options={({ route }) => ({ 
             headerTitle: () => (
               <Text
-                numberOfLines={2}   
+                numberOfLines={2}
                 ellipsizeMode="tail"
                 style={{
                   color: '#BB86FC',

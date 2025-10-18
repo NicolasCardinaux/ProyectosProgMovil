@@ -1,13 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { conferences as initialConferences } from '../data/conferences';
+import { conferences as initialConferences } from '../data/conferences'; 
 
-const STORAGE_KEY = '@conferences_data';
+const STORAGE_KEY = '@conferences_data'; 
 
-
+// Esta función obtiene la lista de conferencias.
+// Primero intenta cargarlas desde el almacenamiento local (AsyncStorage).
+// Si no encuentra nada guardado, usa los datos iniciales y los guarda para la próxima vez.
 export const getConferences = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
-    
     if (jsonValue !== null) {
       console.log("Datos cargados desde AsyncStorage.");
       return JSON.parse(jsonValue);

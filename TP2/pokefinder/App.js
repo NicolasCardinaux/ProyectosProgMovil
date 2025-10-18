@@ -11,8 +11,9 @@ import SearchBar from './components/SearchBar';
 import ErrorDisplay from './components/ErrorDisplay';
 import AppHeader from './components/AppHeader';
 
-const API_URL = 'https://pokeapi.co/api/v2/pokemon?limit=50';
+const API_URL = 'https://pokeapi.co/api/v2/pokemon?limit=50'; 
 
+// Componente principal de la aplicación PokeFinder.
 export default function App() {
   const [allPokemon, setAllPokemon] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,22 +23,17 @@ export default function App() {
   const [nextUrl, setNextUrl] = useState(null);
   const [cache, setCache] = useState({});
 
+
   const fetchPokemon = useCallback(async (url, isRefresh = false) => {
-    if (!isRefresh) {
-      setIsLoading(true);
-    }
+    if (!isRefresh && !isRefreshing) setIsLoading(true); 
     setError(null);
+
 
     if (cache[url] && !isRefresh) {
       const cachedData = cache[url];
-      
-
-      setAllPokemon(prev => {
-        const existingIds = new Set(prev.map(p => p.id));
-        const newPokemon = cachedData.pokemon.filter(p => !existingIds.has(p.id));
-        return [...prev, ...newPokemon];
-      });
-
+      const existingIds = new Set(allPokemon.map(p => p.id));
+      const newPokemon = cachedData.pokemon.filter(p => !existingIds.has(p.id));
+      setAllPokemon(prev => [...prev, ...newPokemon]);
       setNextUrl(cachedData.next);
       setIsLoading(false);
       setIsRefreshing(false);
@@ -46,10 +42,9 @@ export default function App() {
 
     try {
       const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Error de conexión con el servidor.');
-      }
+      if (!response.ok) throw new Error('Error de conexión.');
       const data = await response.json();
+
 
       const processedPokemon = data.results.map(p => {
         const id = p.url.split('/')[p.url.split('/').length - 2];
@@ -62,76 +57,68 @@ export default function App() {
 
 
       setCache(prevCache => ({...prevCache, [url]: { pokemon: processedPokemon, next: data.next }}));
-      
-
       setAllPokemon(prev => {
-        if (isRefresh) {
-          return processedPokemon; 
-        }
+        if (isRefresh) return processedPokemon;
         const combined = [...prev, ...processedPokemon];
-        const uniquePokemon = combined.filter((pokemon, index, self) =>
-          index === self.findIndex((p) => (
-            p.id === pokemon.id
-          ))
-        );
-        return uniquePokemon;
+        return combined.filter((pokemon, index, self) => index === self.findIndex(p => p.id === pokemon.id));
       });
       setNextUrl(data.next);
 
     } catch (e) {
-      setError(e.message || 'No se pudo cargar los Pokémon. Intenta de nuevo.');
+      setError(e.message || 'No se pudo cargar los Pokémon.');
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [cache]);
+  }, [cache, allPokemon]); 
 
 
   useEffect(() => {
-    fetchPokemon(API_URL, true); 
-  }, [fetchPokemon]);
+    fetchPokemon(API_URL, true);
+  }, [fetchPokemon]); 
 
 
   const filteredPokemon = useMemo(() => {
-    if (!searchTerm) {
-      return allPokemon;
-    }
+    if (!searchTerm) return allPokemon;
     return allPokemon.filter(pokemon =>
       pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [searchTerm, allPokemon]);
 
-
   const handleRefresh = () => {
     setIsRefreshing(true);
+
     fetchPokemon(API_URL, true);
   };
-  
+
 
   const handleLoadMore = () => {
-    if (nextUrl && !isLoading) {
+
+    if (nextUrl && !isLoading && !isRefreshing) {
       fetchPokemon(nextUrl);
     }
   };
 
 
   const renderContent = () => {
-    if (isLoading && !allPokemon.length) {
+    if (isLoading && !allPokemon.length && !isRefreshing) { 
       return <ActivityIndicator size="large" color="#FFCB05" style={styles.centered}/>;
     }
     if (error && !allPokemon.length) {
       return <ErrorDisplay message={error} onRetry={handleRefresh} />;
     }
+
     return (
       <PokemonList
         pokemonData={filteredPokemon}
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
         onLoadMore={handleLoadMore}
-        isLoadingMore={isLoading && allPokemon.length > 0}
+        isLoadingMore={isLoading && allPokemon.length > 0 && !isRefreshing}
       />
     );
   };
+
 
   return (
     <SafeAreaView style={styles.container}>

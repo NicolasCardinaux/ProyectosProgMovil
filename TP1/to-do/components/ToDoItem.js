@@ -1,17 +1,18 @@
 import React from "react";
 import { Pressable, Text, StyleSheet } from "react-native";
 
+// Componente para mostrar un ítem individual de la lista de tareas.
 function ToDoItem({ task, onToggle, onDelete }) {
-  console.log("Renderizando item:", task.title);
+  console.log("Renderizando item:", task.title); 
 
   return (
     <Pressable
       style={({ pressed }) => [
         styles.item,
-        task.completed && styles.completed,
+        task.completed && styles.completed, 
         pressed && { opacity: 0.6 },
       ]}
-      onPress={() => onToggle(task.id)}
+      onPress={() => onToggle(task.id)} 
       onLongPress={() => onDelete(task.id)}
     >
       <Text
@@ -26,6 +27,7 @@ function ToDoItem({ task, onToggle, onDelete }) {
   );
 }
 
+
 const styles = StyleSheet.create({
   item: {
     padding: 14,
@@ -36,9 +38,10 @@ const styles = StyleSheet.create({
   completed: { backgroundColor: "#2ea043" },
   text: { color: "#f0f6fc", fontSize: 16 },
   textCompleted: {
-    textDecorationLine: "line-through",
+    textDecorationLine: "line-through", 
     color: "#c9d1d9",
   },
 });
+
 
 export default React.memo(ToDoItem);
