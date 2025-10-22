@@ -20,7 +20,7 @@ export default function App() {
   const [transactions, setTransactions] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Callback que se ejecuta cada vez que llega un evento por WebSocket.
+// Callback que se ejecuta cada vez que llega un evento por WebSocket.
   const handleWsMessage = useCallback((event) => {
     setTransactions((prev) => {
       const newTransactions = { ...prev };

@@ -13,35 +13,30 @@ export const useWebSocket = (onMessage) => {
     const connect = () => {
       ws.current = new WebSocket(WS_URL);
 
-
       ws.current.onopen = () => {
-        setStatus('Conectado');
-        setRetryCount(0); 
-
+        setStatus('Conectado'); 
+        setRetryCount(0);
 
         const subscriptionMessage = {
           type: 'subscribe',
-          userId: 'user-987', 
+          userId: 'user-987',
         };
         if (ws.current?.readyState === WebSocket.OPEN) {
           ws.current.send(JSON.stringify(subscriptionMessage));
         }
       };
 
-
       ws.current.onclose = () => {
         setStatus(`Desconectado. Reintentando...`);
-        const delay = Math.min(3000 * Math.pow(1.5, retryCount), 30000); 
+        const delay = Math.min(3000 * Math.pow(1.5, retryCount), 30000);
         setTimeout(() => {
           setRetryCount((prev) => prev + 1);
         }, delay);
       };
 
-
       ws.current.onerror = (e) => {
         console.error('Error WebSocket:', e.message || 'Error desconocido');
       };
-
 
       ws.current.onmessage = (e) => {
         try {
@@ -53,7 +48,7 @@ export const useWebSocket = (onMessage) => {
       };
     };
 
-    connect(); 
+    connect();
 
     return () => {
       if (ws.current) {
@@ -64,9 +59,7 @@ export const useWebSocket = (onMessage) => {
         ws.current.close();
       }
     };
-
   }, [onMessage, retryCount]);
-
 
   return status;
 };

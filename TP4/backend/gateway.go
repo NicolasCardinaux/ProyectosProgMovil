@@ -16,7 +16,6 @@ import (
 )
 
 // --- Métricas de Monitoreo ---
-// Estas variables definen las métricas que expondremos a Prometheus para monitorear
 var (
 	activeConnections = promauto.NewGauge(prometheus.GaugeOpts{
 		Name: "gateway_websocket_active_connections",
@@ -30,17 +29,14 @@ var (
 )
 
 // --- Configuración y Estado del Gateway ---
-// upgrader se encarga de "actualizar" una conexión HTTP estándar a una conexión WebSocket persistente.
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
-		return true 
+		return true
 	},
 }
 
-
 var subscriptions = make(map[string][]*websocket.Conn)
 var clientsMux sync.Mutex
-
 
 type SubscriptionMessage struct {
 	Type   string `json:"type"`
@@ -49,13 +45,11 @@ type SubscriptionMessage struct {
 
 // --- Lógica Principal del Servicio ---
 
-// startGateway es el punto de entrada del servicio. Inicia el servidor de métricas,el servidor WebSocket, y comienza a consumir eventos de Kafka en un bucle infinito.
 func startGateway() {
 	broker := os.Getenv("KAFKA_BROKER")
 	if broker == "" {
 		broker = "kafka:29092"
 	}
-
 
 	go func() {
 		metricsAddr := ":9090"
@@ -64,7 +58,6 @@ func startGateway() {
 		http.ListenAndServe(metricsAddr, nil)
 	}()
 
-
 	http.HandleFunc("/ws", wsHandler)
 	go func() {
 		addr := ":8080"
@@ -72,7 +65,6 @@ func startGateway() {
 		http.ListenAndServe(addr, nil)
 	}()
 
-	// Este es el bucle principal: lee mensajes de Kafka, los decodifica, y los retransmite.
 	reader := newReader(broker, TopicEvents, "gateway-group")
 	defer reader.Close()
 	log.Printf("[GATEWAY] consumiendo de %s\n", TopicEvents)
@@ -92,23 +84,22 @@ func startGateway() {
 			continue
 		}
 
-		broadcastToUser(evt) 
+		broadcastToUser(evt)
 		reader.CommitMessages(context.Background(), m)
 	}
 }
 
-// wsHandler maneja cada nueva conexión de un cliente. 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("[GATEWAY] ws upgrade failed: %v", err)
 		return
 	}
-	activeConnections.Inc() 
+	activeConnections.Inc()
 
 	go func() {
 		defer func() {
-			activeConnections.Dec() 
+			activeConnections.Dec()
 			removeSubscription(conn)
 			conn.Close()
 		}()
@@ -116,26 +107,24 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		for {
 			_, msg, err := conn.ReadMessage()
 			if err != nil {
-				break 
+				break
 			}
 
 			var subMsg SubscriptionMessage
 			if err := json.Unmarshal(msg, &subMsg); err == nil && subMsg.Type == "subscribe" {
 				addSubscription(subMsg.UserID, conn)
-				conn.WriteMessage(websocket.TextMessage, []byte(`{"type":"ack"}`)) 
+				conn.WriteMessage(websocket.TextMessage, []byte(`{"type":"ack"}`))
 			}
 		}
 	}()
 }
 
-// --- Funciones de Ayuda para Suscripciones ---
 
 func addSubscription(userId string, conn *websocket.Conn) {
 	clientsMux.Lock()
 	defer clientsMux.Unlock()
 	subscriptions[userId] = append(subscriptions[userId], conn)
 }
-
 
 func removeSubscription(conn *websocket.Conn) {
 	clientsMux.Lock()
@@ -153,14 +142,13 @@ func removeSubscription(conn *websocket.Conn) {
 	}
 }
 
-
 func broadcastToUser(evt EventEnvelope) {
 	clientsMux.Lock()
 	defer clientsMux.Unlock()
 
 	userConnections, ok := subscriptions[evt.UserID]
 	if !ok {
-		return 
+		return
 	}
 
 	data, err := json.Marshal(evt)
@@ -170,7 +158,7 @@ func broadcastToUser(evt EventEnvelope) {
 	}
 	for _, conn := range userConnections {
 		if err := conn.WriteMessage(websocket.TextMessage, data); err == nil {
-			eventsSent.With(prometheus.Labels{"event_type": evt.Type}).Inc() 
+			eventsSent.With(prometheus.Labels{"event_type": evt.Type}).Inc()
 		}
 	}
 }
